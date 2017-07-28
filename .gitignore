@@ -1,2 +1,2 @@
-id_rsa
-google-ansible*
+*.retry
+Task-GC-5abb859df639.json
