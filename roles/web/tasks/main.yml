@@ -11,5 +11,5 @@
   copy: src=default dest=/etc/nginx/sites-available/default
 
 - name: Change default index.html to index.php
-  copy: src=index.php dest=/var/www/html/info.php
+  copy: src=index.php dest=/var/www/html/index.php
   notify: restart nginx service
