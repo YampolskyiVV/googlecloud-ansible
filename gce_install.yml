@@ -1,0 +1,8 @@
+---
+
+- name: Create instance
+  hosts: localhost
+  tasks:
+    - include_role:
+        name: gce
+

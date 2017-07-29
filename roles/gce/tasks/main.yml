@@ -1,0 +1,11 @@
+- name: Launch Compute Engine instance
+  gce:
+    instance_names: task1
+    zone: europe-west1-b
+    machine_type: n1-highcpu-2
+    image: ubuntu-1604
+    state: present
+    service_account_email: "vladimit@heroic-throne-175108.iam.gserviceaccount.com"
+    credentials_file: "Task-GC-5abb859df639.json"
+    project_id: "182976627297"
+    disk_size: 20
