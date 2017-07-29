@@ -6,6 +6,11 @@
     - postgresql-contrib
     - php-fpm
     - php-pgsql
+    - python-minimal
+    - python-pip
+
+- name: Install psycopg2 python module
+  pip: name=psycopg2
 
 - name: Change nginx default config and index file
   copy: src=default dest=/etc/nginx/sites-available/default
@@ -13,3 +18,8 @@
 - name: Change default index.html to index.php
   copy: src=index.php dest=/var/www/html/index.php
   notify: restart nginx service
+
+- name: Create itbsg_test database
+  postgresql_db:
+    name: itbsg_test
+  become_user: postgres

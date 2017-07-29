@@ -18,4 +18,3 @@
   tasks:
     - include_role:
         name: web
-
