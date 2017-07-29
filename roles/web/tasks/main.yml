@@ -1,0 +1,13 @@
+- name: Install nginx, php-fpm, postgresql
+  apt-get: name={{ item }} state=present
+  with_items:
+    - nginx
+    - postgresql
+    - postgresql-contrib
+    - php-fpm
+    - php-pgsql
+
+- name: Change nginx default config and index file
+  copy: src=default dest=/etc/nginx/sites-available/default
+  copy: src=index.php dest=/var/www/html/info.php
+  notify: restart nginx service
