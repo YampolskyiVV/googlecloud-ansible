@@ -9,3 +9,15 @@
     credentials_file: "{{ gci.credentials_file }}"
     project_id: "{{ gci.project_id }}"
     disk_size: 20
+    metadata : '{ "startup-script" : "apt-get update" }'
+  register: gcei
+  notify: Save host data
+
+- name: Wait for SSH to come up
+  wait_for:
+    delay: 1
+    host: "{{ item.public_ip }}"
+    port: 22
+    timeout: 30
+    state: started
+  with_items: "{{ gcei.instance_data }}"

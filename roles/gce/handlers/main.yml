@@ -1,0 +1,5 @@
+- name: Save host data
+  add_host:
+    hostname: "{{ item.public_ip }}"
+    groupname: launched
+  with_items: "{{ gcei.instance_data }}"
