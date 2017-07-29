@@ -18,5 +18,5 @@ This playbook spinup single instance with roles:
 4. Replase defoult nginx config and copy index.php(phpinfo)
 5. Create new database
 
-Replace your credential in env/hosts
+Replace your credential in `env/hosts`
 
