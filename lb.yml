@@ -1,0 +1,26 @@
+
+- name: Create instance
+  hosts: localhost
+  tasks:
+    - include_role:
+        name: gce
+
+- name: Configure fwu
+  hosts: localhost
+  tasks:
+    - include_role:
+        name: fwu
+
+- name: Configure instance
+  hosts: launched
+  become: True
+  become_method: sudo
+  tasks:
+    - include_role:
+        name: web
+
+- name: Create load-balancer
+  hosts: localhost 
+  tasks:
+    - include_role:
+        name: lb

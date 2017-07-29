@@ -1,0 +1,9 @@
+- name: Create lb and add memeders
+  gce_lb:
+    name: lb
+    region: "{{ lb.region }}"
+    members: "{{ lb.members }}"
+    project_id: "{{ gci.project_id }}"
+    credentials_file: "{{ gci.credentials_file }}"
+    service_account_email: "{{ gci.service_account_email }}"
+    
