@@ -1,3 +1,4 @@
 *.retry
 Task-GC-5abb859df639.json
 temp*
+google-ansible
