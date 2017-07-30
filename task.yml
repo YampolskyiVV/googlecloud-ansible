@@ -1,0 +1,87 @@
+#Single playbook to spinup instance and install services
+- name: Creating gce instanse and install services
+  hosts: localhost
+  vars_files:
+    - group_vars/all
+  tasks:
+    - name: Launch Compute Engine instance
+      gce:
+        instance_names: "{{ gci.instance_names }}"
+        zone: "{{ gci.zone }}"
+        machine_type: "{{ gci.machine_type }}"
+        image: "{{ gci.image }}"
+        state: present
+        service_account_email: "{{ gci.service_account_email }}"
+        credentials_file: "{{ gci.credentials_file }}"
+        project_id: "{{ gci.project_id }}"
+        disk_size: 20
+        metadata : '{ "startup-script" : "apt-get update" }'
+      register: gcei
+  post_tasks:
+    - name: Save host data
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: launched
+      with_items: "{{ gcei.instance_data }}"
+    - name: Wait for SSH to come up
+      wait_for:
+        delay: 60
+        host: "{{ item.public_ip }}"
+        port: 22
+        timeout: 360
+        state: started
+      with_items: "{{ gcei.instance_data }}"
+- name: Create firewall reles
+  hosts: localhost
+  vars_files:
+    - group_vars/all
+  tasks:
+    - name: Allow HTTP traffic
+      gce_net:
+        fwname: all-http
+        name: default
+        allowed: tcp:80;tcp:22;tcp:443
+        project_id: "{{ gci.project_id }}"
+        credentials_file: "{{ gci.credentials_file }}"
+        service_account_email: "{{ gci.service_account_email }}"
+- name: Install services and update config
+  hosts: launched
+  become: True
+  become_method: sudo
+  tasks:
+    - name: Install nginx, php-fpm, postgresql
+      apt: name={{ item }} state=present
+      with_items:
+        - nginx
+        - postgresql
+        - postgresql-contrib
+        - php-fpm
+        - php-pgsql
+        - python-minimal
+        - python-pip
+    - name: Install psycopg2 python module
+      pip: name=psycopg2
+    - name: Change nginx default config and index file
+      copy: src=default dest=/etc/nginx/sites-available/default
+    - name: Change default index.html to index.php
+      copy: src=index.php dest=/var/www/html/index.php
+    - name: restart nginx service
+      service: name=nginx state=restarted
+    - name: Create itbsg_test database
+      postgresql_db:
+        name: itbsg_test
+      become_user: postgres
+- name: Spinup load balanser
+  hosts: localhost
+  vars_files:
+    - group_vars/all
+  tasks:
+    - name: Create lb and add memeders
+      gce_lb:
+        name: lb
+        region: "{{ lb.region }}"
+        members: "{{ lb.members }}"
+        project_id: "{{ gci.project_id }}"
+        credentials_file: "{{ gci.credentials_file }}"
+        service_account_email: "{{ gci.service_account_email }}"
+        port_range: 80
