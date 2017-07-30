@@ -6,4 +6,4 @@
     project_id: "{{ gci.project_id }}"
     credentials_file: "{{ gci.credentials_file }}"
     service_account_email: "{{ gci.service_account_email }}"
-    
+    port_range: 443 

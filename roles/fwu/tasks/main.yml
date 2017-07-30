@@ -2,7 +2,7 @@
   gce_net:
     fwname: all-http
     name: default
-    allowed: tcp:80;tcp:22
+    allowed: tcp:80;tcp:22;tcp:443
     project_id: "{{ gci.project_id }}"
     credentials_file: "{{ gci.credentials_file }}"
     service_account_email: "{{ gci.service_account_email }}"
