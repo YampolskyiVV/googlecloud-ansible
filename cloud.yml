@@ -8,7 +8,7 @@
       machine_type: n1-highcpu-2
       image: ubuntu-1604
       state: present
-      service_account_email: "vladimit@heroic-throne-175108.iam.gserviceaccount.com"
-      credentials_file: "Task-GC-5abb859df639.json"
-      project_id: "182976627297"
+      service_account_email: "google-cloud-ansible@YOUR_PROJECT_ID.iam.gserviceaccount.com"
+      credentials_file: "google-cloud-ansible.json"
+      project_id: "YOUR_PROJECT_ID""YOUR_PROJECT_ID"
       disk_size: 20
